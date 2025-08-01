@@ -1,0 +1,27 @@
+rds:
+  rds:
+    apply_immediately: true
+    db_parameter_group_name: "scf-mysql-parameter-group"
+    vpc_id: "vpc-05c6c4962e4d97dcd"
+    subnet_group_name: "rds-subnet-group"
+    security_group_ids:
+    parametr_group_family: "mysql8.0"
+    parameters:
+    - name: lower_case_table_names
+      value: 1
+      apply_method: pending-reboot
+    create_read_replica: false
+    option_group_engine: "mysql"
+    engine: "mysql"
+    option_group_engine_version: "8.0"
+    engine_version: "8.0.35"
+    storage_type: "gp3"
+    instance_type: "db.m5.large"
+    multi_az: true
+    port: 13850
+    encryption_at_rest: true
+    kms_key_id: 
+    config_groups: true
+    option_group_name: "rds-option-group"
+    vault_path: ""
+    skip_final_snapshot: false

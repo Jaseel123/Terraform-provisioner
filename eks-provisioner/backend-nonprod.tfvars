@@ -1,0 +1,5 @@
+bucket               = ""
+workspace_key_prefix = "eks"
+key                  = "eks-provisioner"
+region               = "eu-west-1"
+dynamodb_table       = ""

@@ -1,0 +1,46 @@
+apigateway: 
+  api-gw:
+    endpoint_type: REGIONAL
+    binary_media_types:
+      - "*/*"
+    stage_name: v1
+    xray_tracing_enabled: true
+    nlb_arn: 
+    api_gw_domain: 
+    acm_certificate_arn: 
+    kms_key_arn:
+    api_gw_resources:
+      api:
+        method: ANY
+        authorization: NONE
+      v2:
+        method: ANY
+        authorization: NONE
+      explore:
+        method: ANY
+        authorization: NONE
+      socket.io:
+        method: ANY
+        authorization: NONE
+      socket-api:
+        method: ANY
+        authorization: NONE
+      webrtc-call:
+        method: ANY
+        authorization: NONE
+      signaling-proto:
+        method: ANY
+        authorization: NONE
+      admin-api:
+        method: ANY
+        authorization: NONE       
+    api_gw_integrations:
+      api:
+        method: ANY
+        authorization: NONE
+        uri: 
+      v2:
+        method: ANY
+        authorization: NONE
+        uri:   
+    log_group_retention: 7

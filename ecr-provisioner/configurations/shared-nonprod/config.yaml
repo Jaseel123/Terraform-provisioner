@@ -1,0 +1,5 @@
+primary_region: eu-west-1
+secondary_region: me-central-1
+assume_role: 
+tags:
+  managed_by: terraform

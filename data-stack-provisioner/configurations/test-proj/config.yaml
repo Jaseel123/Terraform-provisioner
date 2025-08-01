@@ -1,0 +1,6 @@
+region: me-central-1
+assume_role: 
+vault_endpoint: 
+
+tags:
+  managed_by: terraform

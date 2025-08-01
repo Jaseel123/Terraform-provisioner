@@ -1,0 +1,10 @@
+ecr:
+  test:
+    lifecycle_rules:
+    - description: "Retain maximum of 10 recent images"
+      tag_status: "tagged"
+      tag_pattern: ["release-*"]
+      count_type: "imageCountMoreThan"
+      count_number: 10
+      action_type: "expire"
+    repository_read_access_arns:

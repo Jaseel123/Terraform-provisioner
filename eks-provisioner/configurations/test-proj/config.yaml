@@ -1,0 +1,78 @@
+region: eu-west-1
+assume_role: 
+cluster:
+  name: test
+  version: 1.31
+  endpoint_access:
+    private: true
+    public: false
+  calico_enabled: true
+  master_role:
+    managed_policies:
+    - AmazonEKSClusterPolicy
+    - AmazonEKSVPCResourceController
+  worker_role:
+    managed_policies:
+    - AmazonEKSWorkerNodePolicy
+    - AmazonEKS_CNI_Policy
+    - AmazonEC2ContainerRegistryReadOnly
+    - AmazonSSMManagedInstanceCore
+  vpc_id: 
+  subnet_ids:
+  addons:
+  - name: kube-proxy
+    version: "v1.31.0-eksbuild.5"
+    service_account_role_enabled: false
+  - name: coredns
+    version: "v1.11.3-eksbuild.1"
+    service_account_role_enabled: false
+  - name: aws-ebs-csi-driver
+    version: "v1.35.0-eksbuild.1"
+    service_account_role_enabled: true
+  userdata: "templates/userdata.tpl"
+  infra_nodegroup:
+    launch_template:
+      ami: ami-054aaacfbbac2fb3a
+      on_demand_instance_type: m5.large
+      spot_instance_types: []
+      volume: 
+        size: 100
+        type: gp3
+      subnet_ids:
+      scaling:
+        desired: 1
+        min: 1
+        max: 2
+      max_unavailable: 1
+  worker_nodegroup:
+    launch_template:
+      ami: ami-054aaacfbbac2fb3a
+      on_demand_instance_type: m5.xlarge
+      spot_instance_types: []
+      volume: 
+        size: 100
+        type: gp3
+      subnet_ids:
+      scaling:
+        desired: 3
+        min: 3
+        max: 5
+      max_unavailable: 1
+security_group:
+  endpoint-sg:
+    additional_tags: {}
+  master-sg:
+    additional_tags:
+      kubernetes.io/cluster/comera-dev-cluster: "owned"
+  nodegroup-sg:
+    additional_tags:
+      kubernetes.io/cluster/comera-dev-cluster: "owned"
+sg_rules:
+- description: "allow inbound traffic from vpc"
+  from_port: 0
+  to_port: 0
+  protocol: "-1"
+  source_whole_vpc: true
+  type: ingress
+  security_group: endpoint-sg
+

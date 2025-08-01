@@ -1,0 +1,25 @@
+---
+- name: "Execute eks post cluster creation steps"
+  hosts: localhost
+  ignore_errors: no
+  vars:
+    cluster_arn: "{{ eks_cluster_arn }}"
+    cluster_endpoint: "{{ eks_cluster_endpoint }}"
+    cluster_name: "{{ eks_cluster_name }}"
+    cluster_ca_data: "{{ eks_cluster_ca }}"
+    region: "{{ region }}"
+  tasks:
+    - name: create .kube folder under home dir
+      file:
+        path: ~/.kube
+        state: directory
+    - name: Generate kubeconfig file
+      template:
+        src: ./kubeconfig.j2
+        dest: ~/.kube/config
+    - name: "set context"
+      command: "kubectl config use-context {{ eks_cluster_arn }}"
+    - name: "Delete AWS CNI Deamonset"
+      command: kubectl delete ds aws-node -n kube-system
+    - name: "Install calico"
+      command: kubectl -n kube-system apply -f ./calico-ipip.yaml

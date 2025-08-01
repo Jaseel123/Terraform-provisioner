@@ -1,0 +1,29 @@
+---
+- name: "Execute eks post cluster creation steps"
+  hosts: localhost
+  ignore_errors: no
+  vars:
+    cluster_arn: "{{ eks_cluster_arn }}"
+    cluster_endpoint: "{{ eks_cluster_endpoint }}"
+    cluster_name: "{{ eks_cluster_name }}"
+    cluster_ca_data: "{{ eks_cluster_ca }}"
+    kms_key_arn: "{{ kms_key_arn }}"
+    region: "{{ region }}"
+    efs_file_system_id: "{{ efs_file_system_id }}"
+  tasks:
+    - name: create .kube folder under home dir
+      file:
+        path: ~/.kube
+        state: directory
+    - name: Generate kubeconfig file
+      template:
+        src: ./kubeconfig.j2
+        dest: ~/.kube/config
+    - name: "set context"
+      command: "kubectl config use-context {{ eks_cluster_arn }}"
+    - name: Generate efs storage class manifest
+      template:
+        src: ./sc-efs.j2
+        dest: ./sc-efs.yaml
+    - name: "Deploy efs storage class"
+      command: kubectl -n kube-system apply -f ./sc-efs.yaml
